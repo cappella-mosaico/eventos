@@ -24,7 +24,7 @@ public class EventosApplication {
     return new Evento(
 		      "acampamento",
 		      LocalDateTime.now(),
-		      LocalDateTime.now(),
+		      LocalDateTime.now().plusDays(7),
 		      "https://reactjs.org/logo-og.png",
 		      "A Igreja Presbiteriana Mosaico existe para acolher pessoas e formar discípulos de Cristo através de relacionamentos saudáveis e uma pregação bíblica contemporânea no bairro Setor Bueno, na cidade de Goiânia e no mundo",
 		      "R$ 15,00 adulto R$ 10,00 até 12 anos",
