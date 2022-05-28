@@ -1,0 +1,1 @@
+create sequence public.hibernate_sequence;
