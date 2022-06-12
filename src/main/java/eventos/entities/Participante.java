@@ -1,6 +1,7 @@
 package eventos.entities;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 import java.util.List;
@@ -18,10 +19,12 @@ import javax.persistence.JoinColumn;
 
 import eventos.entities.Dependente;
 import eventos.entities.Evento;
+import eventos.entities.dtos.ParticipanteDTO;
 
 @Entity
 @Data
 @Table(name = "participantes")
+@NoArgsConstructor
 public class Participante {
 
   @Id
@@ -42,5 +45,14 @@ public class Participante {
   @ManyToOne
   @JoinColumn(name = "evento_id")
   private Evento evento;
+
+  public Participante(ParticipanteDTO dto, Evento evento) {
+    this.nome = dto.getNome();
+    this.telefone = dto.getTelefone();
+    this.email = dto.getEmail();
+    this.cpf = dto.getCpf();
+
+    this.evento = evento;
+  }
   
 }

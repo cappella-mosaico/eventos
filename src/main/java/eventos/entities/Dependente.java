@@ -1,6 +1,7 @@
 package eventos.entities;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -11,10 +12,12 @@ import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 
 import eventos.entities.Participante;
+import eventos.entities.dtos.DependenteDTO;
 
 @Entity
 @Data
 @Table(name = "dependentes")
+@NoArgsConstructor
 public class Dependente {
 
   @Id
@@ -26,5 +29,11 @@ public class Dependente {
   @ManyToOne
   @JoinColumn(name = "participante_id")
   private Participante participante;
+
+  public Dependente(DependenteDTO dto, Participante participante) {
+    this.nome = dto.getNome();
+
+    this.participante = participante;
+  }
   
 }
