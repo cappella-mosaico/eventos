@@ -38,9 +38,10 @@ public class Participante {
 
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
-
+  /*
   @OneToMany(mappedBy = "participante", cascade = CascadeType.ALL)
   private List<Dependente> dependentes = new ArrayList<>();
+  */
 
   @ManyToOne
   @JoinColumn(name = "evento_id")
@@ -51,6 +52,7 @@ public class Participante {
     this.telefone = dto.getTelefone();
     this.email = dto.getEmail();
     this.cpf = dto.getCpf();
+    this.createdAt = dto.getCreatedAt();
 
     this.evento = evento;
   }

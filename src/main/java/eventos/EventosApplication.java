@@ -42,6 +42,7 @@ public class EventosApplication {
 
   @PostMapping("/eventos")
   public Evento persist(@RequestBody Evento evento) {
+    evento.setCreatedAt(LocalDateTime.now());
     return repository.saveAndFlush(evento);
   }
 

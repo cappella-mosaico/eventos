@@ -1,5 +1,7 @@
 package eventos.services;
 
+import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import java.lang.RuntimeException;
 
@@ -14,20 +16,13 @@ import eventos.entities.dtos.ParticipanteDTO;
 
 
 @Service
+@AllArgsConstructor
 public class ParticipanteService {
 
-  private ParticipanteRepository participanteRepository;
-  private EventoRepository eventoRepository;
-  private DependenteRepository dependenteRepository;
+  private final ParticipanteRepository participanteRepository;
+  private final EventoRepository eventoRepository;
+  private final DependenteRepository dependenteRepository;
 
-  public ParticipanteService(
-     ParticipanteRepository participanteRepository,
-     EventoRepository eventoRepository,
-     DependenteRepository dependenteRepository) {
-    this.participanteRepository = participanteRepository;
-    this.eventoRepository = eventoRepository;
-    this.dependenteRepository = dependenteRepository;
-  }
 
   public Participante persist(ParticipanteDTO dto) {
     Evento evento = eventoRepository.findById(dto.getEventoId()).orElse(null);
@@ -36,6 +31,7 @@ public class ParticipanteService {
     }
     
     Participante participante = participanteRepository.saveAndFlush(new Participante(dto, evento));
+    /*
     dto.getDependentes()
       .stream()
       .forEach(dependenteDTO -> {
@@ -43,7 +39,7 @@ public class ParticipanteService {
 	    .saveAndFlush(new Dependente(dependenteDTO, participante));
 	  participante.getDependentes().add(dependente);
       });
-
+    */
     return participante;
   }
 

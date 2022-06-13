@@ -1,5 +1,7 @@
 package eventos.controllers;
 
+import java.time.LocalDateTime;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,7 @@ public class ParticipanteController {
   
   @PostMapping("/eventos/participante")
   public Participante add(@RequestBody ParticipanteDTO participante) {
+    participante.setCreatedAt(LocalDateTime.now());
     return participanteService.persist(participante);
   }
 

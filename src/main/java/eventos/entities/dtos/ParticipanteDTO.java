@@ -1,6 +1,8 @@
 package eventos.entities.dtos;
 
 import lombok.Data;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -15,6 +17,8 @@ public class ParticipanteDTO {
   private String cpf;
 
   private Integer eventoId;
+
+  private LocalDateTime createdAt;
 
   private List<DependenteDTO> dependentes = new ArrayList<>();
 
