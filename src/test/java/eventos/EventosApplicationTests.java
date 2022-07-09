@@ -61,6 +61,21 @@ class EventosApplicationTests {
   }
 
   @Test
+  public void testParticipantesCanBeQueried() throws Exception {
+    Evento evento = generatePersistedEvento();
+    Participante participante = generatePersistedParticipante(
+      evento.getId(), Collections.emptyList());
+
+    List<LinkedHashMap<String, Object>> participantes = this.restTemplate.getForObject(
+      "http://localhost:" + port +
+      "/eventos/" + evento.getId() +
+      "/participantes", List.class);
+
+    assertThat(participantes).hasSize(1);
+    assertThat(participantes.get(0).get("id")).isEqualTo(participante.getId().toString());
+  }
+
+  @Test
   public void testRecoverDependentesFromParticipante() throws Exception {
     Evento evento = generatePersistedEvento();
     DependenteDTO dependenteDTO = new DependenteDTO("Mia");

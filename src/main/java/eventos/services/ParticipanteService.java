@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import java.lang.RuntimeException;
+import java.util.List;
 
 import eventos.repositories.ParticipanteRepository;
 import eventos.repositories.EventoRepository;
@@ -42,6 +43,10 @@ public class ParticipanteService {
     dependenteService.persistDependentes(dto.getDependentes(), participante);
     
     return participante;
+  }
+
+  public List<Participante> findByEventoId(Integer eventoId) {
+    return participanteRepository.findByEventoId(eventoId);
   }
 
 }
