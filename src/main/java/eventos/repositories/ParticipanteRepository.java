@@ -8,4 +8,6 @@ import eventos.entities.Participante;
 
 public interface ParticipanteRepository extends JpaRepository<Participante, UUID> {
 
+  Participante findByCpf(String cpf);
+
 }

@@ -29,9 +29,15 @@ public class ParticipanteService {
     if (evento == null) {
       throw new RuntimeException("Evento (" + dto.getEventoId() + ") nao encontrado.");
     }
-    
-    Participante participante = participanteRepository.saveAndFlush(
-      new Participante(dto, evento));
+
+    Participante existingParticipante = participanteRepository.findByCpf(dto.getCpf());
+    Participante participante;
+    if (existingParticipante == null) {
+      participante = participanteRepository.saveAndFlush(
+        new Participante(dto, evento));
+    } else {
+      participante = existingParticipante;
+    }
     
     dependenteService.persistDependentes(dto.getDependentes(), participante);
     

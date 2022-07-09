@@ -2,6 +2,7 @@ package eventos.services;
 
 import java.util.UUID;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,16 @@ public class DependenteService {
 
   public void persistDependentes(List<DependenteDTO> dependentes,
 				 Participante participante) {
+    List<String> nomes = findByParticipanteId(participante.getId())
+      .stream()
+      .map(d -> d.getNome())
+      .collect(Collectors.toList());
+    
+
     dependentes
       .stream()
+      // we should only add new dependentes if they do not yet exist
+      .filter(dto -> nomes.indexOf(dto.getNome()) < 0)
       .forEach(dto -> {
 	  dependenteRepository.saveAndFlush(
             new Dependente(dto, participante));
