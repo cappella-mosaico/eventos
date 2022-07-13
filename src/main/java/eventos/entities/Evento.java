@@ -38,8 +38,5 @@ public class Evento {
 
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
-  /*
-  @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-  private List<Participante> participantes = new ArrayList<>();
-  */
+
 }

@@ -29,6 +29,7 @@ import eventos.entities.Evento;
 import eventos.entities.Participante;
 import eventos.entities.dtos.ParticipanteDTO;
 import eventos.entities.dtos.DependenteDTO;
+import eventos.entities.dtos.EventoDTO;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -58,6 +59,24 @@ class EventosApplicationTests {
     assertThat(participante).isNotNull();
     assertThat(participante.getId()).isNotNull();
     assertThat(participante.getNome()).contains("ruither");
+  }
+
+  @Test
+  public void testEventoCanBeQueried() throws Exception {
+    Evento evento = generatePersistedEvento();
+    DependenteDTO maria = new DependenteDTO("Maria");
+    DependenteDTO joao = new DependenteDTO("Joao");
+    Participante participante = generatePersistedParticipante(
+      evento.getId(),
+      Arrays.asList(maria, joao)
+    );
+
+    EventoDTO dto = this.restTemplate.getForObject(
+      "http://localhost:" + port + "/eventos/" + evento.getId(),
+      EventoDTO.class);
+
+    assertThat(dto).isNotNull();
+    assertThat(dto.getQuantidadePessoas()).isEqualTo(3);
   }
 
   @Test

@@ -42,4 +42,8 @@ public class DependenteService {
       });
   }
 
+  public Integer countByEvento(Integer eventoId) {
+    return dependenteRepository.countByEventoId(eventoId);
+  }
+
 }

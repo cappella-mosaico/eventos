@@ -49,4 +49,8 @@ public class ParticipanteService {
     return participanteRepository.findByEventoId(eventoId);
   }
 
+  public Integer countByEvento(Integer eventoId) {
+    return participanteRepository.countByEventoId(eventoId);
+  }
+
 }
