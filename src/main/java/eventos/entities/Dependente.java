@@ -25,6 +25,8 @@ public class Dependente {
   private UUID id;
 
   private String nome;
+
+  private boolean isento;
   
   @ManyToOne
   @JoinColumn(name = "participante_id")
@@ -32,8 +34,13 @@ public class Dependente {
 
   public Dependente(DependenteDTO dto, Participante participante) {
     this.nome = dto.getNome();
-
+    this.isento = dto.isIsento();
     this.participante = participante;
+  }
+
+  public void applyFromOther(Dependente dependente) {
+    this.nome = dependente.getNome();
+    this.isento = dependente.isIsento();
   }
   
 }

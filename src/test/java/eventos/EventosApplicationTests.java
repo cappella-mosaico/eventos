@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
+import java.lang.Void;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpEntity;
 
 import eventos.controllers.ParticipanteController;
 import eventos.services.ParticipanteService;
@@ -50,7 +53,7 @@ class EventosApplicationTests {
   private TestRestTemplate restTemplate;
   
   @Test
-  public void testEventoAndParticipanteCanBeCreated() throws Exception {
+  public void eventoAndParticipanteCanBeCreated() throws Exception {
     Evento evento = generatePersistedEvento();
     Participante participante = generatePersistedParticipante(
       evento.getId(),
@@ -62,7 +65,7 @@ class EventosApplicationTests {
   }
 
   @Test
-  public void testEventoCanBeQueried() throws Exception {
+  public void eventoCanBeQueried() throws Exception {
     Evento evento = generatePersistedEvento();
     DependenteDTO maria = new DependenteDTO("Maria");
     DependenteDTO joao = new DependenteDTO("Joao");
@@ -80,7 +83,7 @@ class EventosApplicationTests {
   }
 
   @Test
-  public void testParticipantesCanBeQueried() throws Exception {
+  public void participantesCanBeQueried() throws Exception {
     Evento evento = generatePersistedEvento();
     Participante participante = generatePersistedParticipante(
       evento.getId(), Collections.emptyList());
@@ -95,7 +98,7 @@ class EventosApplicationTests {
   }
 
   @Test
-  public void testRecoverDependentesFromParticipante() throws Exception {
+  public void recoverDependentesFromParticipante() throws Exception {
     Evento evento = generatePersistedEvento();
     DependenteDTO dependenteDTO = new DependenteDTO("Mia");
     Participante participante = generatePersistedParticipante(
@@ -113,8 +116,7 @@ class EventosApplicationTests {
   }
 
   @Test
-  public void testPreventDuplicatedDependenteFromBeingAddedAfterASecondSubmissionOfThoseSameDependentes() {
-    // given
+  public void preventDuplicatedDependenteFromBeingAddedAfterASecondSubmissionOfThoseSameDependentes() {
     Evento evento = generatePersistedEvento();
     DependenteDTO maria = new DependenteDTO("Maria");
     DependenteDTO joao = new DependenteDTO("Joao");
@@ -125,22 +127,20 @@ class EventosApplicationTests {
     Participante participante = generatePersistedParticipante(
       evento.getId(), Arrays.asList(maria, joao, eduardo));
 
-    // when
     List<LinkedHashMap<String, Object>> dependentes = this.restTemplate.getForObject(
       "http://localhost:" + port +
       "/eventos/" + evento.getId() +
       "/" + participante.getId() +
       "/dependentes",
       List.class);
-    
-    // then
+
     assertThat(dependentes.stream().map(d -> d.get("nome")).collect(Collectors.toList()))
       .hasSize(3)
       .contains("Maria", "Joao", "Eduardo");
   }
 
   @Test
-  public void testPreventNewParticipanteWithTheSameCPF() throws Exception {
+  public void preventNewParticipanteWithTheSameCPF() throws Exception {
     Evento evento = generatePersistedEvento();
     Participante participante = generatePersistedParticipante(
       evento.getId(), Collections.emptyList());
@@ -157,6 +157,73 @@ class EventosApplicationTests {
         Participante.class)
       .getBody();
     assertThat(duplicatedParticipante.getId()).isEqualTo(participante.getId());
+  }
+
+  @Test
+  public void assertThatADependenteCanBeIsento() {
+    Evento evento = generatePersistedEvento();
+    DependenteDTO mia = new DependenteDTO("Mia");
+    Participante participante = generatePersistedParticipante(
+      evento.getId(),
+      Collections.singletonList(mia)
+    );
+
+    mia.setIsento(true);
+    this.restTemplate.exchange(
+      "http://localhost:" + port + "/eventos/" 
+        + evento.getId() 
+        + "/" 
+        + participante.getId() 
+        + "/dependentes",
+      HttpMethod.PUT,
+      new HttpEntity(mia),
+      Void.class);
+
+    List<LinkedHashMap<String, Object>> dependentes = this.restTemplate
+      .getForObject("http://localhost:" + port +
+      "/eventos/" + evento.getId() +
+      "/" + participante.getId() +
+      "/dependentes",
+      List.class);
+
+    assertThat(dependentes.get(0).get("isento")).asString().contains("true");
+  }
+
+  @Test
+  public void aParticipanteCanBeIsento() {
+    Evento evento = generatePersistedEvento();
+
+    ParticipanteDTO dto = new ParticipanteDTO();
+    dto.setEventoId(evento.getId());
+    dto.setNome("Maria");
+    dto.setTelefone("999999999");
+    dto.setEmail("maria@fakemail.com");
+    dto.setCpf("553.766.071-78");
+    dto.setIsento(false);
+    dto.setDependentes(Collections.emptyList());
+
+    Participante participante = this.restTemplate.postForEntity(
+        "http://localhost:" + port + "/eventos/participante",
+        dto,
+        Participante.class)
+      .getBody();
+
+    List<LinkedHashMap<String, Object>> participantes = this.restTemplate.getForObject(
+      "http://localhost:" + port +
+      "/eventos/" + evento.getId() +
+      "/participantes", List.class);
+
+    assertThat(participantes.get(0).get("isento")).isEqualTo(false);
+
+    dto.setIsento(true);
+
+    Participante participanteIsento = this.restTemplate.postForEntity(
+        "http://localhost:" + port + "/eventos/participante",
+        dto,
+        Participante.class)
+      .getBody();
+
+    assertThat(participanteIsento.isIsento()).isEqualTo(true);
   }
 
   private Evento generatePersistedEvento() {

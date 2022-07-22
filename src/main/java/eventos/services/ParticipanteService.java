@@ -31,17 +31,18 @@ public class ParticipanteService {
       throw new RuntimeException("Evento (" + dto.getEventoId() + ") nao encontrado.");
     }
 
-    Participante existingParticipante = participanteRepository.findByCpf(dto.getCpf());
-    Participante participante;
+    // TODO fix the bug where the same participante can be in multiple events
+    Participante existingParticipante = participanteRepository
+      .findByCpf(dto.getCpf());
+    Participante participante = new Participante(dto, evento);
     if (existingParticipante == null) {
-      participante = participanteRepository.saveAndFlush(
-        new Participante(dto, evento));
+      participante = participanteRepository.saveAndFlush(participante);
     } else {
-      participante = existingParticipante;
+      existingParticipante.applyFromOther(participante);
+      participante = participanteRepository.saveAndFlush(existingParticipante);
     }
     
     dependenteService.persistDependentes(dto.getDependentes(), participante);
-    
     return participante;
   }
 

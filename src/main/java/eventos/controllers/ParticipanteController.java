@@ -25,8 +25,10 @@ public class ParticipanteController {
   }
   
   @PostMapping("/eventos/participante")
-  public Participante add(@RequestBody ParticipanteDTO participante) {
-    participante.setCreatedAt(LocalDateTime.now());
+  public Participante save(@RequestBody ParticipanteDTO participante) {
+    if (participante.getId() == null) {
+      participante.setCreatedAt(LocalDateTime.now());
+    }
     return participanteService.persist(participante);
   }
 

@@ -24,6 +24,20 @@ public class DependenteService {
     return dependenteRepository.findByParticipanteId(participanteId);
   }
 
+  public Dependente persist(Dependente dependente) {
+    Dependente persisted = dependenteRepository.findByParticipanteIdAndNome(
+      dependente.getParticipante().getId(),
+      dependente.getNome());
+
+    if (persisted == null) {
+      persisted = dependente;
+    } else {
+      persisted.applyFromOther(dependente);
+    }
+
+    return dependenteRepository.saveAndFlush(persisted);
+  }
+
   public void persistDependentes(List<DependenteDTO> dependentes,
 				 Participante participante) {
     List<String> nomes = findByParticipanteId(participante.getId())

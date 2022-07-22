@@ -35,13 +35,11 @@ public class Participante {
   private String telefone;
   private String email;
   private String cpf;
+  private boolean isento;
 
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
-  /*
-  @OneToMany(mappedBy = "participante", cascade = CascadeType.ALL)
-  private List<Dependente> dependentes = new ArrayList<>();
-  */
+
 
   @ManyToOne
   @JoinColumn(name = "evento_id")
@@ -52,9 +50,23 @@ public class Participante {
     this.telefone = dto.getTelefone();
     this.email = dto.getEmail();
     this.cpf = dto.getCpf();
+    this.isento = dto.isIsento();
+
     this.createdAt = dto.getCreatedAt();
 
     this.evento = evento;
+  }
+
+  public void applyFromOther(Participante participante) {
+    this.nome = participante.getNome();
+    this.telefone = participante.getTelefone();
+    this.email = participante.getEmail();
+    this.cpf = participante.getCpf();
+    this.isento = participante.isIsento();
+  }
+
+  public String toString() {
+    return nome + " " + telefone + " " + email + " " + cpf + " " + isento;
   }
   
 }
