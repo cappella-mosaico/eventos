@@ -11,7 +11,7 @@ import eventos.entities.Dependente;
 
 public interface DependenteRepository extends JpaRepository<Dependente, UUID> {
 
-  List<Dependente> findByParticipanteId(UUID participanteId);
+  List<Dependente> findByParticipanteIdOrderByIdDesc(UUID participanteId);
   Dependente findByParticipanteIdAndNome(UUID participanteId, String nome);
 
   @Query(value = "SELECT COUNT(d) FROM Dependente d JOIN d.participante p WHERE p.evento.id = ?1")

@@ -2,9 +2,11 @@ package eventos.services;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.stereotype.Service;
 import java.lang.RuntimeException;
 import java.util.List;
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Service;
 
 import eventos.repositories.ParticipanteRepository;
 import eventos.repositories.EventoRepository;
@@ -38,6 +40,7 @@ public class ParticipanteService {
     if (existingParticipante == null) {
       participante = participanteRepository.saveAndFlush(participante);
     } else {
+      existingParticipante.setUpdatedAt(LocalDateTime.now());
       existingParticipante.applyFromOther(participante);
       participante = participanteRepository.saveAndFlush(existingParticipante);
     }
@@ -47,7 +50,7 @@ public class ParticipanteService {
   }
 
   public List<Participante> findByEventoId(Integer eventoId) {
-    return participanteRepository.findByEventoId(eventoId);
+    return participanteRepository.findByEventoIdOrderByIdDesc(eventoId);
   }
 
   public Integer countByEvento(Integer eventoId) {

@@ -21,7 +21,7 @@ public class DependenteService {
   }
 
   public List<Dependente> findByParticipanteId(UUID participanteId) {
-    return dependenteRepository.findByParticipanteId(participanteId);
+    return dependenteRepository.findByParticipanteIdOrderByIdDesc(participanteId);
   }
 
   public Dependente persist(Dependente dependente) {
