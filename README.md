@@ -1,0 +1,3 @@
+# run
+## tests
+./mvnw test

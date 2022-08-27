@@ -25,6 +25,9 @@ public class DependenteService {
   }
 
   public Dependente persist(Dependente dependente) {
+    if (dependente.getNome().trim().isEmpty()) {
+      return null;
+    }
     Dependente persisted = dependenteRepository.findByParticipanteIdAndNome(
       dependente.getParticipante().getId(),
       dependente.getNome());
@@ -49,7 +52,8 @@ public class DependenteService {
     dependentes
       .stream()
       // we should only add new dependentes if they do not yet exist
-      .filter(dto -> nomes.indexOf(dto.getNome()) < 0)
+      .filter(dto -> nomes.indexOf(dto.getNome()) < 0
+              && !dto.getNome().trim().isEmpty())
       .forEach(dto -> {
 	  dependenteRepository.saveAndFlush(
             new Dependente(dto, participante));

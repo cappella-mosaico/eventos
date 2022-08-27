@@ -116,6 +116,23 @@ class EventosApplicationTests {
   }
 
   @Test
+  public void preventDependenteWithoutNome() throws Exception {
+    Evento evento = generatePersistedEvento();
+    DependenteDTO dependenteDTO = new DependenteDTO(" ");
+    Participante participante = generatePersistedParticipante(
+      evento.getId(), Collections.singletonList(dependenteDTO));
+
+    List<LinkedHashMap<String, Object>> dependentes = this.restTemplate.getForObject(
+      "http://localhost:" + port +
+      "/eventos/" + evento.getId() +
+      "/" + participante.getId() +
+      "/dependentes",
+      List.class);
+
+    assertThat(dependentes).hasSize(0);
+  }
+
+  @Test
   public void preventDuplicatedDependenteFromBeingAddedAfterASecondSubmissionOfThoseSameDependentes() {
     Evento evento = generatePersistedEvento();
     DependenteDTO maria = new DependenteDTO("Maria");
