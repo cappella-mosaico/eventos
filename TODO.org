@@ -1,0 +1,3 @@
+* DONE adicionar idade dos participantes e dependentes
+* DONE adicionar valor pago por familia
+* TODO adicionar exporter por evento

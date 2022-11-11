@@ -25,6 +25,7 @@ public class Dependente {
   private UUID id;
 
   private String nome;
+  private Integer idade;
 
   private boolean isento;
   
@@ -35,12 +36,14 @@ public class Dependente {
   public Dependente(DependenteDTO dto, Participante participante) {
     this.nome = dto.getNome();
     this.isento = dto.isIsento();
+    this.idade = dto.getIdade();
     this.participante = participante;
   }
 
   public void applyFromOther(Dependente dependente) {
     this.nome = dependente.getNome();
     this.isento = dependente.isIsento();
+    this.idade = dependente.getIdade();
   }
   
 }

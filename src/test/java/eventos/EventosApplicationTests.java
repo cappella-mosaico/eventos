@@ -67,8 +67,8 @@ class EventosApplicationTests {
   @Test
   public void eventoCanBeQueried() throws Exception {
     Evento evento = generatePersistedEvento();
-    DependenteDTO maria = new DependenteDTO("Maria");
-    DependenteDTO joao = new DependenteDTO("Joao");
+    DependenteDTO maria = new DependenteDTO("Maria", 10);
+    DependenteDTO joao = new DependenteDTO("Joao", 13);
     Participante participante = generatePersistedParticipante(
       evento.getId(),
       Arrays.asList(maria, joao)
@@ -100,7 +100,7 @@ class EventosApplicationTests {
   @Test
   public void recoverDependentesFromParticipante() throws Exception {
     Evento evento = generatePersistedEvento();
-    DependenteDTO dependenteDTO = new DependenteDTO("Mia");
+    DependenteDTO dependenteDTO = new DependenteDTO("Mia", 10);
     Participante participante = generatePersistedParticipante(
       evento.getId(), Collections.singletonList(dependenteDTO));
 
@@ -118,7 +118,7 @@ class EventosApplicationTests {
   @Test
   public void preventDependenteWithoutNome() throws Exception {
     Evento evento = generatePersistedEvento();
-    DependenteDTO dependenteDTO = new DependenteDTO(" ");
+    DependenteDTO dependenteDTO = new DependenteDTO(" ", 10);
     Participante participante = generatePersistedParticipante(
       evento.getId(), Collections.singletonList(dependenteDTO));
 
@@ -135,11 +135,11 @@ class EventosApplicationTests {
   @Test
   public void preventDuplicatedDependenteFromBeingAddedAfterASecondSubmissionOfThoseSameDependentes() {
     Evento evento = generatePersistedEvento();
-    DependenteDTO maria = new DependenteDTO("Maria");
-    DependenteDTO joao = new DependenteDTO("Joao");
+    DependenteDTO maria = new DependenteDTO("Maria", 10);
+    DependenteDTO joao = new DependenteDTO("Joao", 10);
     generatePersistedParticipante(
       evento.getId(), Arrays.asList(joao, maria));
-    DependenteDTO eduardo = new DependenteDTO("Eduardo");
+    DependenteDTO eduardo = new DependenteDTO("Eduardo", 10);
 
     Participante participante = generatePersistedParticipante(
       evento.getId(), Arrays.asList(maria, joao, eduardo));
@@ -167,6 +167,8 @@ class EventosApplicationTests {
     duplicatedParticipanteDTO.setTelefone("888888888");
     duplicatedParticipanteDTO.setEmail("joyce@fakemail.com");
     duplicatedParticipanteDTO.setCpf("543.214.535-93");
+    duplicatedParticipanteDTO.setValorPago(15.5);
+    duplicatedParticipanteDTO.setIdade(42);
 
     Participante duplicatedParticipante = this.restTemplate.postForEntity(
         "http://localhost:" + port + "/eventos/participante",
@@ -179,7 +181,7 @@ class EventosApplicationTests {
   @Test
   public void assertThatADependenteCanBeIsento() {
     Evento evento = generatePersistedEvento();
-    DependenteDTO mia = new DependenteDTO("Mia");
+    DependenteDTO mia = new DependenteDTO("Mia", 10);
     Participante participante = generatePersistedParticipante(
       evento.getId(),
       Collections.singletonList(mia)
@@ -217,6 +219,8 @@ class EventosApplicationTests {
     dto.setEmail("maria@fakemail.com");
     dto.setCpf("553.766.071-78");
     dto.setIsento(false);
+    dto.setValorPago(15.0);
+    dto.setIdade(15);
     dto.setDependentes(Collections.emptyList());
 
     Participante participante = this.restTemplate.postForEntity(
@@ -260,6 +264,8 @@ class EventosApplicationTests {
     dto.setTelefone("999999999");
     dto.setEmail("ruither@fakemail.com");
     dto.setCpf("543.214.535-93");
+    dto.setValorPago(15.4);
+    dto.setIdade(12);
     dto.setDependentes(dependentes);
 
     Participante participante = this.restTemplate.postForEntity(

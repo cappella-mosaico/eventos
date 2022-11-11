@@ -36,6 +36,8 @@ public class Participante {
   private String email;
   private String cpf;
   private boolean isento;
+  private Double valorPago;
+  private Integer idade;
 
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
@@ -51,7 +53,8 @@ public class Participante {
     this.email = dto.getEmail();
     this.cpf = dto.getCpf();
     this.isento = dto.isIsento();
-
+    this.valorPago = dto.getValorPago();
+    this.idade = dto.getIdade();
     this.createdAt = dto.getCreatedAt();
 
     this.evento = evento;
@@ -63,10 +66,12 @@ public class Participante {
     this.email = participante.getEmail();
     this.cpf = participante.getCpf();
     this.isento = participante.isIsento();
+    this.valorPago = participante.getValorPago();
+    this.idade = participante.getIdade();
   }
 
   public String toString() {
-    return nome + " " + telefone + " " + email + " " + cpf + " " + isento;
+    return nome + " " + telefone + " " + email + " " + cpf + " " + isento + " " + valorPago  + " " + idade;
   }
   
 }

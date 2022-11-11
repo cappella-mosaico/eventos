@@ -19,6 +19,8 @@ public class ParticipanteDTO {
   private String email;
   private String cpf;
   private boolean isento;
+  private Double valorPago;
+  private Integer idade;
 
   private Integer eventoId;
 
@@ -27,7 +29,7 @@ public class ParticipanteDTO {
   private List<DependenteDTO> dependentes = new ArrayList<>();
 
   public String toString() {
-    return nome + " " + telefone + " " + email + " " + cpf + " " + isento + " " + eventoId;
+    return nome + " " + telefone + " " + email + " " + cpf + " " + isento + " " + eventoId + " " + valorPago + " " + idade;
   }
 
 }
