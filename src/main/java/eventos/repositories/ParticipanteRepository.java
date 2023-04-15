@@ -9,7 +9,7 @@ import eventos.entities.Participante;
 
 public interface ParticipanteRepository extends JpaRepository<Participante, UUID> {
 
-  Participante findByCpf(String cpf);
+  Participante findByCpfAndEventoId(String cpf, Integer eventoId);
   List<Participante> findByEventoIdOrderByIdDesc(Integer eventoId);
   Integer countByEventoId(Integer eventoId);
 

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -53,7 +54,7 @@ public class Participante {
     this.email = dto.getEmail();
     this.cpf = dto.getCpf();
     this.isento = dto.isIsento();
-    this.valorPago = dto.getValorPago();
+    this.valorPago = Optional.ofNullable(dto.getValorPago()).orElse(0.0d);
     this.idade = dto.getIdade();
     this.createdAt = dto.getCreatedAt();
 
