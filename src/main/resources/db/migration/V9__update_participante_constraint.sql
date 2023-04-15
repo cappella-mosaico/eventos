@@ -1,7 +1,5 @@
 ALTER TABLE participantes
-      DROP CONSTRAINT unique_cpf;
-      
-DROP INDEX IF EXISTS participantes_cpf;
+      DROP CONSTRAINT IF EXISTS unique_cpf;
 
 CREATE UNIQUE INDEX participantes_cpf_evento 
        ON participantes (cpf, evento_id);
