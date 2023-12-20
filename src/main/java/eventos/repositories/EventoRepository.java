@@ -7,5 +7,6 @@ import eventos.entities.Evento;
 public interface EventoRepository extends JpaRepository<Evento, Integer> {
 
   List<Evento> findTop10ByOrderByIdDesc();
+  void deleteById(Integer eventoId);
 
 }
